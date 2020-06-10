@@ -3,8 +3,6 @@ import {Author} from './models/author.model'
 import { Post } from "./models/post.model";
 import {PostService} from './post.service'
 import {AuthorService} from './author.service'
-import { NewAuthor } from "./dto/author.input";
-import { PostInput } from "./dto/post.input";
 @Resolver(of => Author)
 export class AuthorResolver{
     constructor(
@@ -37,9 +35,9 @@ export class AuthorResolver{
         @Args({name: 'id', type:()=>Int}) id : number,
         @Args('firstName') firstName:string,
         @Args('lastName') lastName:string,
-        //@Args('posts') posts:PostInput
+        @Args('posts',{ type:()=> Post}) posts:Post
     ){
-        return this.authorService.addAuthor(id,firstName,lastName);
+        return this.authorService.addAuthor(id,firstName,lastName,[posts]);
     }
 
     @Mutation(returns => Post)
@@ -55,8 +53,9 @@ export class AuthorResolver{
         @Args({name: 'id', type:()=>Int}) id : number,
         @Args({name: 'title'}) title : string,
         @Args({name: 'votes', type:()=>Int}) votes : number,
+        @Args('author',{type: ()=>Author})author:Author,
     ){
-        return this.postService.insertPost(id, title,votes)
+        return this.postService.insertPost(id, title,author,votes)
     }
 
     

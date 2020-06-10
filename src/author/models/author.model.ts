@@ -1,17 +1,20 @@
-import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { Field, Int, ObjectType, InputType } from "@nestjs/graphql";
 import {Post} from './post.model';
+import { IsOptional } from "class-validator";
 
 @ObjectType()
-export class Author{
+@InputType('AuthorInput')
+export class Author {
     @Field(type => Int)
     id: number;
-
-    @Field()
-    firstName: string
-
-    @Field({nullable: true})
-    lastName?: string
-
-    @Field(type => [Post])
-    posts: Post[]
-}
+  
+    @Field({ nullable: true })
+    firstName?: string;
+  
+    @Field({ nullable: true })
+    lastName?: string;
+  
+    @Field(type => [Post],{nullable:"items"})
+    @IsOptional()
+    posts: Post[];
+  }

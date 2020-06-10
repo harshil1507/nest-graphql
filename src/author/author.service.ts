@@ -1,7 +1,6 @@
 import { Injectable,ConflictException } from '@nestjs/common';
 import {Author} from './models/author.model'
 import {Post} from './models/post.model';
-import { NewAuthor } from "./dto/author.input";
 @Injectable()
 export class AuthorService{
 
@@ -21,7 +20,7 @@ export class AuthorService{
         id: number,
         firstName: string, 
         lastName?: string,
-        posts?: [Post]
+        posts?: Post[]
         ){
             const checkAuthor = this.findOneById(id);
             if(this.authors[id]){
@@ -31,9 +30,9 @@ export class AuthorService{
             {
                 const newAuthor = {
                     id : id,
-                    posts : posts,
                     firstName : firstName,
-                    lastName : lastName
+                    lastName : lastName,
+                    posts : posts,
                 }
                 this.authors.push(newAuthor);
                 return newAuthor;

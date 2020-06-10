@@ -6,13 +6,28 @@ type Post {
   id: Int!
   title: String!
   votes: Int
+  author: Author
 }
 
 type Author {
   id: Int!
-  firstName: String!
+  firstName: String
   lastName: String
   posts: [Post!]!
+}
+
+input PostInput {
+  id: Int!
+  title: String!
+  votes: Int
+  author: AuthorInput
+}
+
+input AuthorInput {
+  id: Int!
+  firstName: String
+  lastName: String
+  posts: [PostInput]!
 }
 
 type Query {
@@ -21,7 +36,7 @@ type Query {
 }
 
 type Mutation {
-  addAuthor(lastName: String!, firstName: String!, id: Int!): Author!
+  addAuthor(posts: PostInput!, lastName: String!, firstName: String!, id: Int!): Author!
   upvotePost(id: Int!): Post!
-  AddPost(votes: Int!, title: String!, id: Int!): Post!
+  AddPost(author: AuthorInput!, votes: Int!, title: String!, id: Int!): Post!
 }
