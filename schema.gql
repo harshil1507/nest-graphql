@@ -2,17 +2,17 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Author {
-  id: Int!
-  firstName: String
-  lastName: String
-  posts: [Post!]!
-}
-
 type Post {
   id: Int!
   title: String!
   votes: Int
+}
+
+type Author {
+  id: Int!
+  firstName: String!
+  lastName: String
+  posts: [Post!]!
 }
 
 type Query {
@@ -21,6 +21,7 @@ type Query {
 }
 
 type Mutation {
-  AddPost(votes: Int!, title: String!, id: Int!): Post!
+  addAuthor(lastName: String!, firstName: String!, id: Int!): Author!
   upvotePost(id: Int!): Post!
+  AddPost(votes: Int!, title: String!, id: Int!): Post!
 }

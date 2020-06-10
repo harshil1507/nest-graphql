@@ -8,11 +8,9 @@ export class NewAuthor {
     id: number;
 
     @Field()
-    @MaxLength(30)
     firstName: string;
 
     @Field()
-    @MaxLength(30)
     lastName: string;
 
     @Field(type=>[Post])

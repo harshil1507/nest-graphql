@@ -1,10 +1,11 @@
 import { Injectable,ConflictException } from '@nestjs/common';
 import {Author} from './models/author.model'
 import {Post} from './models/post.model';
+import {AuthorService} from './author.service'
 import {UpvotePostInput} from './dto/upvote.input';
-
+import { NewAuthor } from "./dto/author.input";
 @Injectable()
-export class PostService{
+export class PostService extends AuthorService{
     private posts: Post[] = []
 
     findAll(id: Object) : any{
@@ -26,7 +27,7 @@ export class PostService{
         if(checkPostExist){
             throw new ConflictException('Post with this id already exists');
         }
-        const post={id: id, title: title, votes: votes}
+        const post={id: id, title: title,votes: votes}
         this.posts.push(post);
         return post;
     }
