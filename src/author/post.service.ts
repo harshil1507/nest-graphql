@@ -23,21 +23,16 @@ export class PostService extends AuthorService{
     insertPost(
         id:number, 
         title: string,
-        author:Author, 
         votes?: number
     ){
-        const authorExist = this.authors[super.findOneById(author.id)];
-        if(!authorExist){ throw new NotFoundException('author doesnt exist')}
-        else{
-            const checkPostExist = this.posts[this.findPost(id)];
-            console.log(checkPostExist)
-            if(checkPostExist){
-                throw new ConflictException('Post with this id already exists');
-            }
-            const post={id: id, title: title,author: author,votes: votes}
-            this.posts.push(post);
-            return post;
+        const checkPostExist = this.posts[this.findPost(id)];
+        console.log(checkPostExist)
+        if(checkPostExist){
+            throw new ConflictException('Post with this id already exists');
         }
+        const post={id: id, title: title,votes: votes}
+        this.posts.push(post);
+        return post;
     }
 
     upvoteById(id: number){

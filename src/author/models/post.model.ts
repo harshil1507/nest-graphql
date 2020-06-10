@@ -11,8 +11,5 @@ export class Post{
     title: string;
 
     @Field(type => Int,{nullable: true})
-    votes?: number
-
-    @Field(type=>Author,{nullable:true})
-    author: Author
+    votes?: number;
 }

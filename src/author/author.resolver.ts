@@ -53,9 +53,8 @@ export class AuthorResolver{
         @Args({name: 'id', type:()=>Int}) id : number,
         @Args({name: 'title'}) title : string,
         @Args({name: 'votes', type:()=>Int}) votes : number,
-        @Args('author',{type: ()=>Author})author:Author,
     ){
-        return this.postService.insertPost(id, title,author,votes)
+        return this.postService.insertPost(id, title,votes)
     }
 
     

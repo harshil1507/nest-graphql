@@ -1,6 +1,5 @@
 import { Field, Int, ObjectType, InputType } from "@nestjs/graphql";
 import {Post} from './post.model';
-import { IsOptional } from "class-validator";
 
 @ObjectType()
 @InputType('AuthorInput')
@@ -14,6 +13,6 @@ export class Author {
     @Field({ nullable: true })
     lastName?: string;
   
-    @Field(type => [Post])
-    posts: Post[];
+    @Field(type => [Post],{nullable:true})
+    posts?: Post[];
   }
