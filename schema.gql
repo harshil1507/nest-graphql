@@ -2,12 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Post {
-  id: Int!
-  title: String!
-  votes: Int
-}
-
 type Author {
   id: Int!
   firstName: String
@@ -15,14 +9,18 @@ type Author {
   posts: [Post!]!
 }
 
+type Post {
+  id: Int!
+  title: String!
+  votes: Int
+}
+
 type Query {
   author(id: Int!): Author!
+  posts: [Post!]!
 }
 
 type Mutation {
-  upvotePost(upvotePostData: UpvotePostInput!): Post!
-}
-
-input UpvotePostInput {
-  postId: Float!
+  AddPost(votes: Int!, title: String!, id: Int!): Post!
+  upvotePost(id: Int!): Post!
 }
