@@ -27,7 +27,7 @@ input AuthorInput {
   id: Int!
   firstName: String
   lastName: String
-  posts: [PostInput]!
+  posts: [PostInput!]!
 }
 
 type Query {

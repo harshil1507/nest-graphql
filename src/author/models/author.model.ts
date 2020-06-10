@@ -14,7 +14,6 @@ export class Author {
     @Field({ nullable: true })
     lastName?: string;
   
-    @Field(type => [Post],{nullable:"items"})
-    @IsOptional()
+    @Field(type => [Post])
     posts: Post[];
   }
