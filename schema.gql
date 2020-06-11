@@ -19,18 +19,6 @@ type Author {
   posts: [Post]
 }
 
-type AuthorEdge {
-  cursor: String!
-  node: Author!
-}
-
-type PaginatedAuthor {
-  edges: [AuthorEdge!]
-  next: Int!
-  totalCount: Int!
-  hasNextPage: Boolean!
-}
-
 input PostInput {
   id: Int!
   title: String!
@@ -46,11 +34,11 @@ input AuthorInput {
 }
 
 type Query {
-  pagedAuthor(first: Int!): PaginatedAuthor!
+  autoPage(limit: Int, cursor: Int): [Author!]!
   author(id: Int!): Author!
   getAllAuthors: [Author!]!
   posts: [Post!]!
-  getAuthors(limit: Int, first: Int!): [Author!]!
+  getAuthors(limit: Int, cursor: Int): [Author!]!
 }
 
 type Mutation {

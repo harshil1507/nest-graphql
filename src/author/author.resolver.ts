@@ -11,15 +11,22 @@ export class AuthorResolver{
         private postService : PostService,
     ){}
 
-    @Query(returns=>PaginatedAuthor, {name:'pagedAuthor'})
-    async getPagedAuthor(
-        @Args('first', {type: ()=> Int}) cursor: number,
+    // @Query(returns=>PaginatedAuthor, {name:'pagedAuthor'})
+    // async getPagedAuthor(
+    //     @Args('first', {type: ()=> Int}) cursor: number,
+    // ){
+    //     return this.authorService.pagedAuthor(cursor)
+    // }
+    @Query(returns=>[Author],{name: 'autoPage'})
+    async autoPage(
+        @Args({name :'cursor', type: ()=>Int, nullable:true}) cursor?: number,
+        @Args({name :'limit', type: ()=>Int, nullable:true}) limitQuery?: number
     ){
-        return this.authorService.pagedAuthor(cursor)
+        return this.authorService.autoPage(cursor,limitQuery);
     }
 
     @Query(returns => Author, {name: 'author'})
-    async getAuthor(
+    async getSingleAuthor(
         @Args('id', {type: ()=> Int}) id: number,
     ){
         return this.authorService.findAuthor(id);
@@ -37,10 +44,10 @@ export class AuthorResolver{
 
     @Query(returns=>[Author],{name: 'getAuthors'})
     async getPage(
-        @Args({name :'first', type: ()=>Int}) cursor: number,
+        @Args({name :'cursor', type: ()=>Int, nullable:true}) cursor?: number,
         @Args({name :'limit', type: ()=>Int, nullable:true}) limitQuery?: number
     ){
-        return this.authorService.pagination(cursor, limitQuery);
+        return this.authorService.pagination(cursor,limitQuery);
     }
 
     // @ResolveField('posts', returns => [Post])
