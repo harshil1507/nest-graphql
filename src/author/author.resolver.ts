@@ -1,5 +1,6 @@
 import { Resolver, Args, Int, ResolveField, Parent, Query, Mutation, Subscription } from "@nestjs/graphql";
-import {Author} from './models/author.model'
+import {Author} from './models/author.model';
+import {PaginatedAuthor} from './models/paginated-author.model';
 import { Post } from "./models/post.model";
 import {PostService} from './post.service'
 import {AuthorService} from './author.service'
@@ -10,6 +11,13 @@ export class AuthorResolver{
         private postService : PostService,
     ){}
 
+    @Query(returns=>PaginatedAuthor, {name:'pagedAuthor'})
+    async getPagedAuthor(
+        @Args('first', {type: ()=> Int}) cursor: number,
+    ){
+        return this.authorService.pagedAuthor(cursor)
+    }
+
     @Query(returns => Author, {name: 'author'})
     async getAuthor(
         @Args('id', {type: ()=> Int}) id: number,
@@ -17,27 +25,40 @@ export class AuthorResolver{
         return this.authorService.findAuthor(id);
     }
 
+    @Query(returns => [Author])
+    async getAllAuthors(){
+        return this.authorService.findAll();
+    }
+
     @Query(returns=>[Post], {name: 'posts'})
     async getAllPosts(){
         return this.postService.showAllPosts();
     }
 
-    @ResolveField('posts', returns => [Post])
-    async getPosts(
-        @Parent() author: Author,
+    @Query(returns=>[Author],{name: 'getAuthors'})
+    async getPage(
+        @Args({name :'first', type: ()=>Int}) cursor: number,
+        @Args({name :'limit', type: ()=>Int, nullable:true}) limitQuery?: number
     ){
-            const {id} = author;
-            return this.postService.findAll({authorId: id});
+        return this.authorService.pagination(cursor, limitQuery);
     }
+
+    // @ResolveField('posts', returns => [Post])
+    // async getPosts(
+    //     @Parent() author: Author,
+    // ){
+    //         const {id} = author;
+    //         return this.postService.findAll({authorId: id});
+    // }
 
     @Mutation(returns=>Author)
     async addAuthor(
         @Args({name: 'id', type:()=>Int}) id : number,
         @Args('firstName') firstName:string,
-        @Args('lastName') lastName:string,
-        @Args('posts',{ type:()=> Post}) posts:Post
+        @Args('lastName', {nullable:true}) lastName?:string,
+        //@Args('posts',{ type:()=> Post, nullable:true, defaultValue:[]}) posts?:Post
     ){
-        return this.authorService.addAuthor(id,firstName,lastName,[posts]);
+        return this.authorService.addAuthor(id,firstName,lastName,);
     }
 
     @Mutation(returns => Post)
@@ -53,23 +74,9 @@ export class AuthorResolver{
         @Args({name: 'id', type:()=>Int}) id : number,
         @Args({name: 'title'}) title : string,
         @Args({name: 'votes', type:()=>Int}) votes : number,
+        @Args({name:'date', type:()=> Date}) date : Date,
     ){
-        return this.postService.insertPost(id, title,votes)
+        return this.postService.insertPost(id, title,votes,date)
     }
 
-    
-    // @Subscription(returns => Comment)
-    // commentAdded(){
-    //     return pubSub.asyncIterator('comment added')
-    // }
-
-    // @Mutation(returns => Post)
-    // async addComment(
-    // @Args('postId', { type: () => Int }) postId: number,
-    // @Args('comment', { type: () => Comment }) comment: CommentInput,
-    // ) {
-    // const newComment = this.commentsService.addComment({ id: postId, comment });
-    // pubSub.publish('commentAdded', { commentAdded: newComment });
-    // return newComment;
-    // }
 }

@@ -6,35 +6,55 @@ type Post {
   id: Int!
   title: String!
   votes: Int
+  date: Date!
 }
+
+"""Custom scalar for Date"""
+scalar Date
 
 type Author {
   id: Int!
   firstName: String
   lastName: String
-  posts: [Post!]!
+  posts: [Post]
+}
+
+type AuthorEdge {
+  cursor: String!
+  node: Author!
+}
+
+type PaginatedAuthor {
+  edges: [AuthorEdge!]
+  next: Int!
+  totalCount: Int!
+  hasNextPage: Boolean!
 }
 
 input PostInput {
   id: Int!
   title: String!
   votes: Int
+  date: Date!
 }
 
 input AuthorInput {
   id: Int!
   firstName: String
   lastName: String
-  posts: [PostInput!]
+  posts: [PostInput]
 }
 
 type Query {
+  pagedAuthor(first: Int!): PaginatedAuthor!
   author(id: Int!): Author!
+  getAllAuthors: [Author!]!
   posts: [Post!]!
+  getAuthors(limit: Int, first: Int!): [Author!]!
 }
 
 type Mutation {
-  addAuthor(posts: PostInput!, lastName: String!, firstName: String!, id: Int!): Author!
+  addAuthor(lastName: String, firstName: String!, id: Int!): Author!
   upvotePost(id: Int!): Post!
-  AddPost(votes: Int!, title: String!, id: Int!): Post!
+  AddPost(date: Date!, votes: Int!, title: String!, id: Int!): Post!
 }
