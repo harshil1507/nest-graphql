@@ -7,7 +7,7 @@ export class AuthorService{
 
     private authors : Author[] = [];
     private limit : number = 2;
-    //private prevPointer : number;
+    private prevPointer : number|null = null;
     private count :number =0;
     private start: number|null = null;
 
@@ -35,9 +35,35 @@ export class AuthorService{
             this.start = next[0].id;
             return this.authors.slice(index,index+limit);
         }
-        return this.authors.slice(index);
-        
-         
+        return this.authors.slice(index);  
+    }
+
+    bothWayPagination(
+        ascending: boolean = true,
+        cursor: number = this.start,
+        limit:number = this.limit){
+
+            let results= []
+            let index;
+            if(ascending === true){
+                for(let i=0 ;i<limit; i++){
+                    
+                    index = this.findOneById(cursor)
+                    console.log('cursor',cursor,'index', index)
+                    results.push(this.authors[index]);
+                    index = this.authors[index].next;
+                }
+                return results;
+            }
+            else{
+                for(let i=0 ;i<limit; i++){
+                    let index = this.findOneById(cursor)
+                    results.push(this.authors[index]);
+                    index = this.authors[index].prev;
+                }
+                return results;
+            }
+
     }
 
     findAll(){
@@ -67,19 +93,22 @@ export class AuthorService{
                     firstName : firstName,
                     lastName : '',
                     posts : [],
-                    // next: null,
-                    // prev: null,
+                    next: null,
+                    prev: null,
                 }
-                // if(this.prevPointer!==null){
-                //     newAuthor.prev = this.prevPointer;
-                //     this.
-                // }
+                newAuthor.prev = this.prevPointer;
+                console.log(this.prevPointer)
+                if(this.prevPointer!==null){
+                    
+                    newAuthor.prev = this.prevPointer;
+                    this.authors[this.findOneById(this.prevPointer)].next=id;
+                }
                 if(lastName){newAuthor.lastName = lastName}
                 // if(posts){newAuthor.posts = posts}
                 if(this.start===null){
-                    this.start=id                    
+                    this.start=id;                   
                 }
-                //this.prevPointer = id;
+                this.prevPointer = id;
                 this.count= this.count + 1;
                 // console.log(this.count)
                 this.authors.push(newAuthor);

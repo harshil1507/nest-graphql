@@ -17,6 +17,8 @@ type Author {
   firstName: String
   lastName: String
   posts: [Post]
+  next: Int
+  prev: Int
 }
 
 input PostInput {
@@ -31,9 +33,14 @@ input AuthorInput {
   firstName: String
   lastName: String
   posts: [PostInput]
+  next: Int
+  prev: Int
 }
 
 type Query {
+  """can go both ways specify true for normal, false for reverse"""
+  pagination(limit: Int, cursor: Int, ascending: Boolean): [Author!]!
+
   """
   will automatically start from the first element that was inserted and with a default limit of 2. both the starting point and limit cna be passed as args
   """
