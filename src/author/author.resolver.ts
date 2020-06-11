@@ -17,7 +17,10 @@ export class AuthorResolver{
     // ){
     //     return this.authorService.pagedAuthor(cursor)
     // }
-    @Query(returns=>[Author],{name: 'autoPage'})
+    @Query(returns=>[Author],{
+        name: 'autoPage',
+        description:'will automatically start from the first element that was inserted and with a default limit of 2. both the starting point and limit cna be passed as args'
+    })
     async autoPage(
         @Args({name :'cursor', type: ()=>Int, nullable:true}) cursor?: number,
         @Args({name :'limit', type: ()=>Int, nullable:true}) limitQuery?: number

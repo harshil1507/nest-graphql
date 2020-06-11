@@ -21,8 +21,8 @@ export class AuthorService{
         return this.authors.slice(index, index+limitQuery)
     }
 
-    autoPage(cursor?: number,limitQuery: number = this.limit){
-        cursor =this.start;
+    autoPage(cursor: number = this.start,limitQuery: number = this.limit){
+        
         let limit = limitQuery
         let index = this.findOneById(cursor);
 

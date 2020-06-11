@@ -34,6 +34,9 @@ input AuthorInput {
 }
 
 type Query {
+  """
+  will automatically start from the first element that was inserted and with a default limit of 2. both the starting point and limit cna be passed as args
+  """
   autoPage(limit: Int, cursor: Int): [Author!]!
   author(id: Int!): Author!
   getAllAuthors: [Author!]!
