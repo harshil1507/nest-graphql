@@ -3,7 +3,21 @@ import {AuthorResolver} from './author.resolver'
 import {AuthorService} from './author.service';
 import {PostService} from './post.service';
 import {DateScalar} from './scalars/custom-scalar.scalar-type';
+import { ServerStartPlugin, LoggingPlugin } from "./plugins/request.plugin";
+import { ComplexityPlugin } from "./plugins/complexity.plugin";
+import { GraphQLSchemaHost} from '@nestjs/graphql';
+
 @Module({
-  providers: [AuthorResolver, AuthorService, PostService , DateScalar],
+  imports:[],
+  providers: [
+    AuthorResolver, 
+    AuthorService, 
+    PostService , 
+    DateScalar,
+    ServerStartPlugin,
+    LoggingPlugin,
+    //ComplexityPlugin,
+    GraphQLSchemaHost,
+  ],
 })
 export class AuthorModule{}

@@ -10,6 +10,7 @@ export class AuthorService{
     private prevPointer : number|null = null;
     private count :number =0;
     private start: number|null = null;
+    private authorsPaginated : PaginatedAuthor[] = []
 
         findOneById(id: number){
         return this.authors.findIndex(author=> author.id === id)
@@ -102,7 +103,7 @@ export class AuthorService{
                     prev: null,
                 }
                 newAuthor.prev = this.prevPointer;
-                console.log(this.prevPointer)
+                //console.log(this.prevPointer)
                 if(this.prevPointer!==null){
                     
                     newAuthor.prev = this.prevPointer;
@@ -124,22 +125,18 @@ export class AuthorService{
     // pagedAuthor(first: number){
     //     let totalCount = this.authors.length;
     //     let hasNextPage: boolean;
-    //     if (first < totalCount){
-    //         hasNextPage = true;
-    //     }
-    //     else    hasNextPage = false;
         
-    //     const edge={
-    //         cursor: '',
-    //         node : this.authors.filter((auth)=>{})
-    //     }
+    //     hasNextPage = first < totalCount
         
     //     const mapping ={
-    //         edges: edge,
+    //         edges: {
+    //             cursor: '',
+    //             node : this.authors.filter((auth)=>{})
+    //         },
     //         totalCount : totalCount,
     //         hasNextPage : hasNextPage
     //     }
                 
-    //     return this.authorsPaginated = mapping;
+    //     return this.authorsPaginated.push(mapping);
     // }
 }

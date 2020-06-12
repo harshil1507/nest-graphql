@@ -3,14 +3,14 @@ import {Post} from './post.model';
 @ObjectType()
 @InputType('AuthorInput')
 export class Author {
-    @Field(type => Int)
+    @Field(type => Int,{complexity:10})
     id: number;
   
-    //@Directive('@upper')
-    @Field({ nullable: true })
+    @Field({ nullable: true , complexity:10})
     firstName?: string;
   
-    @Field({ nullable: true })
+    @Directive('@upper')
+    @Field({ nullable: true ,complexity:1})
     lastName?: string;
   
     @Field(type => [Post],{nullable:"itemsAndList"})

@@ -17,7 +17,7 @@ export class PostService{
     }
 
     findPost(id :number){
-        console.log(this.posts)
+        //console.log(this.posts)
         return this.posts.findIndex(prod=>prod.id===id);
     }
 
@@ -28,7 +28,7 @@ export class PostService{
         date?: Date,
     ){
         const checkPostExist = this.posts[this.findPost(id)];
-        console.log(checkPostExist)
+        //console.log(checkPostExist)
         if(checkPostExist){
             throw new ConflictException('Post with this id already exists');
         }
