@@ -82,7 +82,7 @@ export class AuthorResolver{
         @Args('lastName', {nullable:true}) lastName?:string,
         //@Args('posts',{ type:()=> Post, nullable:true, defaultValue:[]}) posts?:Post
     ){
-        return this.authorService.addAuthor(id,firstName,lastName,);
+        return this.authorService.create({id,firstName,lastName});
     }
 
     @Mutation(returns => Post)

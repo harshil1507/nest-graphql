@@ -2,13 +2,25 @@ import { Injectable,ConflictException } from '@nestjs/common';
 import {Author} from './models/author.model'
 import {PaginatedAuthor} from './models/paginated-author.model'
 import {Post} from './models/post.model';
+import { InjectModel } from '@nestjs/mongoose';
+import { AuthorDB } from "./schemas/author.schema";
+import { Model } from 'mongoose';
+import { CreateAuthorDto } from "./dto/create-author.dto";
 @Injectable()
 export class AuthorService{
 
-    
+    constructor(@InjectModel(AuthorDB.name)private authorModel: Model<AuthorDB>){}
 
+    async checkAuthorPresent(id){
+        return this.authorModel.find({id: id}).exec()
+    }
 
-
+    async create(createAuthorDto : CreateAuthorDto): Promise<AuthorDB>{
+        const createdAuthor = new this.authorModel(createAuthorDto);
+        if((await this.checkAuthorPresent(createdAuthor.id)).length !== 0)
+            throw new ConflictException;
+        else    return createdAuthor.save();
+    }
 
     //--------------------------------------OLD GRAPHQL QUERIES---------------------------------------------------//
     private authors : Author[] = [];
