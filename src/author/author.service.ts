@@ -5,6 +5,12 @@ import {Post} from './models/post.model';
 @Injectable()
 export class AuthorService{
 
+    
+
+
+
+
+    //--------------------------------------OLD GRAPHQL QUERIES---------------------------------------------------//
     private authors : Author[] = [];
     private limit : number = 2;
     private prevPointer : number|null = null;
@@ -12,7 +18,8 @@ export class AuthorService{
     private start: number|null = null;
     private authorsPaginated : PaginatedAuthor[] = []
 
-        findOneById(id: number){
+
+    findOneById(id: number){
         return this.authors.findIndex(author=> author.id === id)
     }
 

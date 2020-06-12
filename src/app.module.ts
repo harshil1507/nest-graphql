@@ -5,9 +5,11 @@ import { GraphQLModule } from "@nestjs/graphql";
 import { AuthorModule } from './author/author.module'
 import {UpperCaseDirective} from './author/directives/upper-case.directive'
 // import { ComplexityPlugin } from "./author/plugins/complexity.plugin";
+import { MongooseModule } from "@nestjs/mongoose";
 @Module({
   imports: [
     AuthorModule,
+    MongooseModule.forRoot('mongodb+srv://harshil:harshil@123@cluster0-stbbj.mongodb.net/Nest?retryWrites=true&w=majority'),
     GraphQLModule.forRoot({
       schemaDirectives: {
         upper : UpperCaseDirective,
