@@ -47,19 +47,24 @@ export class AuthorService{
             let index;
             if(ascending === true){
                 for(let i=0 ;i<limit; i++){
-                    
                     index = this.findOneById(cursor)
-                    console.log('cursor',cursor,'index', index)
                     results.push(this.authors[index]);
-                    index = this.authors[index].next;
+                    if(this.authors[index].next === null){
+                        break;
+                    }
+                    cursor = this.authors[index].next;
                 }
                 return results;
             }
+
             else{
                 for(let i=0 ;i<limit; i++){
-                    let index = this.findOneById(cursor)
+                    index = this.findOneById(cursor)
                     results.push(this.authors[index]);
-                    index = this.authors[index].prev;
+                    if(this.authors[index].prev === null){
+                        break;
+                    }
+                    cursor = this.authors[index].prev;
                 }
                 return results;
             }
