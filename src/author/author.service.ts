@@ -3,9 +3,10 @@ import {Author} from './models/author.model'
 import {PaginatedAuthor} from './models/paginated-author.model'
 import {Post} from './models/post.model';
 import { InjectModel } from '@nestjs/mongoose';
-import { AuthorDB } from "./schemas/author.schema";
+import { AuthorDB,PostDB } from "./schemas/author.schema";
 import { Model } from 'mongoose';
 import { CreateAuthorDto } from "./dto/create-author.dto";
+import { CreatePostDto } from "./dto/create-post.dto";
 @Injectable()
 export class AuthorService{
 
@@ -21,6 +22,15 @@ export class AuthorService{
             throw new ConflictException;
         else    return createdAuthor.save();
     }
+
+    async deleteAuthor(id: number): Promise<String | Object>{
+        console.log(id)
+        let a = await this.authorModel.deleteOne({id:id}).exec()
+        if(a.n === 1 )
+            return 'deleted'
+        return 'not deleted'
+    }
+
 
     //--------------------------------------OLD GRAPHQL QUERIES---------------------------------------------------//
     private authors : Author[] = [];

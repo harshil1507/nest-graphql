@@ -17,6 +17,8 @@ export class AuthorResolver{
     // ){
     //     return this.authorService.pagedAuthor(cursor)
     // }
+    
+
     @Query(returns=>[Author],{
         name: 'pagination',
         description:'can go both ways specify true for normal, false for reverse'
@@ -83,6 +85,13 @@ export class AuthorResolver{
         //@Args('posts',{ type:()=> Post, nullable:true, defaultValue:[]}) posts?:Post
     ){
         return this.authorService.create({id,firstName,lastName});
+    }
+
+    @Mutation(returns => String)
+    async Delete(
+        @Args({name: 'id', type: ()=> Int}) authorId : number
+    ){
+        return this.authorService.deleteAuthor(authorId)
     }
 
     @Mutation(returns => Post)

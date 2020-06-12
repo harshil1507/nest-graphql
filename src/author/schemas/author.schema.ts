@@ -2,16 +2,13 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 @Schema()
-export class Post extends Document{
+export class PostDB extends Document{
     @Prop()
     id: number;
 
     @Prop()
     title: string;
 
-    @Prop()
-    firstName: string;
-    
     @Prop()
     votes: number;
 
@@ -33,8 +30,8 @@ export class AuthorDB extends Document{
     @Prop()
     lastName: string;
 
-    @Prop([Post])
-    posts: Post[]
+    @Prop([PostDB])
+    posts: PostDB[]
 
 }
 

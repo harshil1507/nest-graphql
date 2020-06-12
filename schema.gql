@@ -53,6 +53,7 @@ type Query {
 
 type Mutation {
   addAuthor(lastName: String, firstName: String!, id: Int!): Author!
+  Delete(id: Int!): String!
   upvotePost(id: Int!): Post!
   AddPost(date: Date!, votes: Int!, title: String!, id: Int!): Post!
 }
