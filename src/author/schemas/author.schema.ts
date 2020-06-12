@@ -22,7 +22,7 @@ export class Post extends Document{
 
 
 @Schema()
-export class Author extends Document{
+export class AuthorClass extends Document{
 
     @Prop()
     id: number;
@@ -38,4 +38,4 @@ export class Author extends Document{
 
 }
 
-export const AuthorSchema = SchemaFactory.createForClass(Author);
+export const AuthorSchema = SchemaFactory.createForClass(AuthorClass);

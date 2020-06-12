@@ -7,12 +7,12 @@ import { ServerStartPlugin, LoggingPlugin } from "./plugins/request.plugin";
 // import { ComplexityPlugin } from "./plugins/complexity.plugin";
 import { GraphQLSchemaHost} from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Author, AuthorSchema } from './schemas/author.schema';
+import { AuthorClass, AuthorSchema } from './schemas/author.schema';
 
 @Module({
   imports:[
     MongooseModule.forFeature([{
-      name: Author.name,
+      name: AuthorClass.name,
        schema: AuthorSchema
       }]),
     ],
