@@ -16,11 +16,11 @@ export class Author {
     @Field(type => [Post],{nullable:"itemsAndList"})
     posts?: Post[];
   
-    // @Field(type=>Int)
-    // next?: number|null;
+    @Field(type=>Int,{nullable:true})
+    next?: number|null;
 
-    // @Field(type=>Int)
-    // prev?: number|null;
+    @Field(type=>Int,{nullable:true})
+    prev?: number|null;
 
   }
 
