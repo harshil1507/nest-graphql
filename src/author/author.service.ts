@@ -6,14 +6,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { AuthorDB,PostDB } from "./schemas/author.schema";
 import { Model } from 'mongoose';
 import { CreateAuthorDto } from "./dto/create-author.dto";
-import { CreatePostDto } from "./dto/create-post.dto";
 @Injectable()
 export class AuthorService{
 
-    constructor(@InjectModel(AuthorDB.name)private authorModel: Model<AuthorDB>){}
+    constructor(@InjectModel(AuthorDB.name)protected authorModel?: Model<AuthorDB>){}
 
-    async checkAuthorPresent(id){
-        return this.authorModel.find({id: id}).exec()
+    async checkAuthorPresent(id?: number){
+        if(id)  return this.authorModel.find({id: id}).exec();
+        return this.authorModel.find().exec();
     }
 
     async create(createAuthorDto : CreateAuthorDto): Promise<AuthorDB>{
@@ -31,6 +31,12 @@ export class AuthorService{
         return 'not deleted'
     }
 
+    async updateAuthor(id: number, firstName?: string, lastName?: string){
+        let newAuthor = await this.authorModel.findOne({id:id}).exec()
+        if(firstName) newAuthor.firstName = firstName;
+        if(firstName) newAuthor.lastName = lastName;
+        return newAuthor.save();
+    }
 
     //--------------------------------------OLD GRAPHQL QUERIES---------------------------------------------------//
     private authors : Author[] = [];

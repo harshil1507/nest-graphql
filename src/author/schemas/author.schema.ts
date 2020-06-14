@@ -36,3 +36,4 @@ export class AuthorDB extends Document{
 }
 
 export const AuthorSchema = SchemaFactory.createForClass(AuthorDB);
+export const PostSchema = SchemaFactory.createForClass(PostDB);

@@ -7,7 +7,7 @@ import { ServerStartPlugin, LoggingPlugin } from "./plugins/request.plugin";
 // import { ComplexityPlugin } from "./plugins/complexity.plugin";
 import { GraphQLSchemaHost} from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AuthorDB, AuthorSchema } from './schemas/author.schema';
+import { AuthorDB, AuthorSchema, PostDB, PostSchema } from './schemas/author.schema';
 
 @Module({
   imports:[
@@ -15,6 +15,10 @@ import { AuthorDB, AuthorSchema } from './schemas/author.schema';
       name: AuthorDB.name,
        schema: AuthorSchema
       }]),
+    MongooseModule.forFeature([{
+      name : PostDB.name,
+      schema: PostSchema
+    }])
     ],
   providers: [
     AuthorResolver, 
