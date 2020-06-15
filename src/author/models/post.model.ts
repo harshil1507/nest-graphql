@@ -5,7 +5,7 @@ import {DateScalar} from '../scalars/custom-scalar.scalar-type'
 @ObjectType()
 @InputType('PostInput')
 export class Post{
-    @Field(type => Int)
+    @Field()
     id: number;
 
     @Field()

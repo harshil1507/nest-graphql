@@ -10,10 +10,10 @@ export class PostDB extends Document{
     title: string;
 
     @Prop()
-    votes: number;
+    votes?: number;
 
     @Prop()
-    date: Date;
+    date?: Date;
 
 }
 
@@ -30,7 +30,7 @@ export class AuthorDB extends Document{
     @Prop()
     lastName: string;
 
-    @Prop([PostDB])
+    @Prop([PostDB],)
     posts: PostDB[]
 
 }

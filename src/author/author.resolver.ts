@@ -1,6 +1,5 @@
 import { Resolver, Args, Int, ResolveField, Parent, Query, Mutation, Subscription } from "@nestjs/graphql";
 import {Author} from './models/author.model';
-import {PaginatedAuthor} from './models/paginated-author.model';
 import { Post } from "./models/post.model";
 import {PostService} from './post.service'
 import {AuthorService} from './author.service'
@@ -11,74 +10,70 @@ export class AuthorResolver{
         private postService : PostService,
     ){}
 
-    // @Query(returns=>PaginatedAuthor, {name:'pagedAuthor'})
-    // async getPagedAuthor(
-    //     @Args('first', {type: ()=> Int}) cursor: number,
-    // ){
-    //     return this.authorService.pagedAuthor(cursor)
-    // }
+
+//--------Queries-----------
+@Query(returns => [Post])
+async FetchAllPosts(
+    @Args({name: 'authorId', type:()=>Int}) authorId : number,
+    @Args('cursor')cursor : string,
+    @Args('limit', {type: ()=>Int})limit : number,
+    @Args('reverse',{type: ()=> Boolean, nullable: true}) reverse : boolean
+){
+    return this.authorService.fetchAllPosts(authorId);
+}
+
+
+
+@Query(returns=>[Author])
+async FetchAllAuthors(
+    @Args('cursor')cursor : string,
+    @Args('limit', {type: ()=>Int, nullable: true})limit : number,
+    @Args('reverse',{type: ()=> Boolean, nullable: true}) reverse : boolean
+
+){
+    return this.authorService.fetchAllAuthors(cursor,limit,reverse);
+}
+
+//--------Mutations-----------
+
+    @Mutation(returns=> [Post])
+    async AddPost(
+        @Args({name: 'authorId', type:()=>Int}) authorId : number,
+        @Args({name: 'id', type:()=>Int}) id : number,
+        @Args({name: 'title'}) title : string,
+        @Args({name: 'votes', type:()=>Int, nullable:true}) votes ?: number,
+        @Args({name:'date', type:()=> Date, nullable:true}) date ?: Date,
+    ){
+        return this.authorService.addPost({authorId,id, title})
+    }
+
+    @Mutation(returns => Post)
+    async UpdatePost(
+        @Args({name: 'authorId', type:()=>Int}) authorId : number,
+        @Args({name: 'id', type:()=>Int}) id : number,
+        @Args({name: 'title'}) title : string,
+    ){
+        return this.authorService.updatePost({authorId,id,title})
+    }
+
+    @Mutation(returns => Post)
+    async UpVote(
+        @Args({name: 'authorId', type:()=>Int}) authorId : number,
+        @Args({name: 'id', type:()=>Int}) id : number,
+    ){
+        return this.authorService.upVote(authorId,id);
+    }
     
-
-    @Query(returns=>[Author],{
-        name: 'pagination',
-        description:'can go both ways specify true for normal, false for reverse'
-    })
-    async BothWayPagination(
-        @Args({name :'ascending', type: ()=>Boolean, nullable:true}) ascending?: boolean,
-        @Args({name :'cursor', type: ()=>Int, nullable:true}) cursor?: number,
-        @Args({name :'limit', type: ()=>Int, nullable:true}) limitQuery?: number
+    @Mutation(returns => Author)
+    async DeletePost(
+        @Args({name: 'authorId', type:()=>Int}) authorId : number,
+        @Args({name: 'id', type:()=>Int}) id : number,
     ){
-        return this.authorService.bothWayPagination(ascending,cursor,limitQuery);
+        return this.authorService.deletePost(authorId,id);
     }
-
-
-
-    @Query(returns=>[Author],{
-        name: 'autoPage',
-        description:'will automatically start from the first element that was inserted and with a default limit of 2. both the starting point and limit cna be passed as args'
-    })
-    async autoPage(
-        @Args({name :'cursor', type: ()=>Int, nullable:true}) cursor?: number,
-        @Args({name :'limit', type: ()=>Int, nullable:true}) limitQuery?: number
-    ){
-        return this.authorService.autoPage(cursor,limitQuery);
-    }
-
-    @Query(returns => Author, {name: 'author'})
-    async getSingleAuthor(
-        @Args('id', {type: ()=> Int}) id: number,
-    ){
-        return this.authorService.findAuthor(id);
-    }
-
-    @Query(returns => [Author])
-    async getAllAuthors(){
-        return this.authorService.findAll();
-    }
-
-    @Query(returns=>[Post], {name: 'posts'})
-    async getAllPosts(){
-        return this.postService.showAllPosts();
-    }
-
-    @Query(returns=>[Author],{name: 'getAuthors'})
-    async getPage(
-        @Args({name :'cursor', type: ()=>Int, nullable:true}) cursor?: number,
-        @Args({name :'limit', type: ()=>Int, nullable:true}) limitQuery?: number
-    ){
-        return this.authorService.pagination(cursor,limitQuery);
-    }
-
-    // @ResolveField('posts', returns => [Post])
-    // async getPosts(
-    //     @Parent() author: Author,
-    // ){
-    //         const {id} = author;
-    //         return this.postService.findAll({authorId: id});
-    // }
 
     @Mutation(returns=>Author)
-    async addAuthor(
+    async AddAuthor(
         @Args({name: 'id', type:()=>Int}) id : number,
         @Args('firstName') firstName:string,
         @Args('lastName', {nullable:true}) lastName?:string,
@@ -87,29 +82,22 @@ export class AuthorResolver{
         return this.authorService.create({id,firstName,lastName});
     }
 
-    @Mutation(returns => String)
-    async Delete(
+    @Mutation(returns => Boolean)
+    async DeleteAuthor(
         @Args({name: 'id', type: ()=> Int}) authorId : number
     ){
         return this.authorService.deleteAuthor(authorId)
     }
 
-    @Mutation(returns => Post)
-    async upvotePost(
-        @Args({name :'id', type: ()=>Int}) id:number,
-       
-    ){
-        return this.postService.upvoteById(id)
-    }
-
-    @Mutation(returns=> Post)
-    async AddPost(
+    @Mutation(returns=>Author)
+    async UpdateAuthor(
         @Args({name: 'id', type:()=>Int}) id : number,
-        @Args({name: 'title'}) title : string,
-        @Args({name: 'votes', type:()=>Int}) votes : number,
-        @Args({name:'date', type:()=> Date}) date : Date,
+        @Args('firstName',{nullable : true}) firstName?:string,
+        @Args('lastName', {nullable:true}) lastName?:string,
+        //@Args('posts',{ type:()=> Post, nullable:true, defaultValue:[]}) posts?:Post
     ){
-        return this.postService.insertPost(id, title,votes,date)
+        return this.authorService.updateAuthor(id,firstName,lastName);
     }
+    
 
 }

@@ -3,7 +3,7 @@
 # ------------------------------------------------------
 
 type Post {
-  id: Int!
+  id: Float!
   title: String!
   votes: Int
   date: Date!
@@ -22,7 +22,7 @@ type Author {
 }
 
 input PostInput {
-  id: Int!
+  id: Float!
   title: String!
   votes: Int
   date: Date!
@@ -38,22 +38,16 @@ input AuthorInput {
 }
 
 type Query {
-  """can go both ways specify true for normal, false for reverse"""
-  pagination(limit: Int, cursor: Int, ascending: Boolean): [Author!]!
-
-  """
-  will automatically start from the first element that was inserted and with a default limit of 2. both the starting point and limit cna be passed as args
-  """
-  autoPage(limit: Int, cursor: Int): [Author!]!
-  author(id: Int!): Author!
-  getAllAuthors: [Author!]!
-  posts: [Post!]!
-  getAuthors(limit: Int, cursor: Int): [Author!]!
+  FetchAllPosts(reverse: Boolean, limit: Int!, cursor: String!, authorId: Int!): [Post!]!
+  FetchAllAuthors(reverse: Boolean, limit: Int, cursor: String!): [Author!]!
 }
 
 type Mutation {
-  addAuthor(lastName: String, firstName: String!, id: Int!): Author!
-  Delete(id: Int!): String!
-  upvotePost(id: Int!): Post!
-  AddPost(date: Date!, votes: Int!, title: String!, id: Int!): Post!
+  AddPost(date: Date, votes: Int, title: String!, id: Int!, authorId: Int!): [Post!]!
+  UpdatePost(title: String!, id: Int!, authorId: Int!): Post!
+  UpVote(id: Int!, authorId: Int!): Post!
+  DeletePost(id: Int!, authorId: Int!): Author!
+  AddAuthor(lastName: String, firstName: String!, id: Int!): Author!
+  DeleteAuthor(id: Int!): Boolean!
+  UpdateAuthor(lastName: String, firstName: String, id: Int!): Author!
 }
