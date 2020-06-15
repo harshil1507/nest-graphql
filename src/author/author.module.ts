@@ -8,6 +8,7 @@ import { ServerStartPlugin, LoggingPlugin } from "./plugins/request.plugin";
 import { GraphQLSchemaHost} from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthorDB, AuthorSchema, PostDB, PostSchema } from './schemas/author.schema';
+import { ObjectIdScalar } from './scalars/mongo-object.scalar';
 
 @Module({
   imports:[
@@ -25,6 +26,7 @@ import { AuthorDB, AuthorSchema, PostDB, PostSchema } from './schemas/author.sch
     AuthorService, 
     PostService , 
     DateScalar,
+    ObjectIdScalar,
     // ServerStartPlugin,
     // LoggingPlugin,
     // //ComplexityPlugin,

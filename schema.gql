@@ -3,17 +3,20 @@
 # ------------------------------------------------------
 
 type Post {
-  id: Float!
+  _id: MongoObjectId!
   title: String!
   votes: Int
   date: Date!
 }
 
+"""Mongo object id scalar type"""
+scalar MongoObjectId
+
 """Custom scalar for Date"""
 scalar Date
 
 type Author {
-  id: Int!
+  _id: MongoObjectId!
   firstName: String
   lastName: String
   posts: [Post]
@@ -22,14 +25,14 @@ type Author {
 }
 
 input PostInput {
-  id: Float!
+  _id: MongoObjectId!
   title: String!
   votes: Int
   date: Date!
 }
 
 input AuthorInput {
-  id: Int!
+  _id: MongoObjectId!
   firstName: String
   lastName: String
   posts: [PostInput]
@@ -38,16 +41,16 @@ input AuthorInput {
 }
 
 type Query {
-  FetchAllPosts(reverse: Boolean, limit: Int!, cursor: String!, authorId: Int!): [Post!]!
-  FetchAllAuthors(reverse: Boolean, limit: Int, cursor: String!): [Author!]!
+  FetchAllPosts(reverse: Boolean, limit: Int, cursor: MongoObjectId, authorId: MongoObjectId!): [Post!]!
+  FetchAllAuthors(reverse: Boolean, limit: Int, cursor: MongoObjectId): [Author!]!
 }
 
 type Mutation {
-  AddPost(date: Date, votes: Int, title: String!, id: Int!, authorId: Int!): [Post!]!
-  UpdatePost(title: String!, id: Int!, authorId: Int!): Post!
-  UpVote(id: Int!, authorId: Int!): Post!
-  DeletePost(id: Int!, authorId: Int!): Author!
-  AddAuthor(lastName: String, firstName: String!, id: Int!): Author!
-  DeleteAuthor(id: Int!): Boolean!
-  UpdateAuthor(lastName: String, firstName: String, id: Int!): Author!
+  AddPost(date: Date, votes: Int, title: String!, authorId: MongoObjectId!): [Post!]!
+  UpdatePost(title: String!, id: MongoObjectId!, authorId: MongoObjectId!): Post!
+  UpVote(id: MongoObjectId!, authorId: MongoObjectId!): Post!
+  DeletePost(id: MongoObjectId!, authorId: MongoObjectId!): Author!
+  AddAuthor(lastName: String, firstName: String!): Author!
+  DeleteAuthor(id: MongoObjectId!): Boolean!
+  UpdateAuthor(lastName: String, firstName: String, id: MongoObjectId!): Author!
 }

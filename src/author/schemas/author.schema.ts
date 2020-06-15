@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-
+import { ObjectIdScalar } from '../scalars/mongo-object.scalar';
 @Schema()
 export class PostDB extends Document{
     @Prop()
-    id: number;
+    _id: ObjectIdScalar;
 
     @Prop()
     title: string;
@@ -22,7 +22,7 @@ export class PostDB extends Document{
 export class AuthorDB extends Document{
 
     @Prop()
-    id: number;
+    _id: ObjectIdScalar
     
     @Prop()
     firstName: string;

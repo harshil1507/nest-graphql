@@ -1,6 +1,7 @@
 import { Scalar } from '@nestjs/graphql';
 import { Kind, ASTNode } from 'graphql';
 import { ObjectId } from "mongodb";
+var mongoose = require('mongoose');
 
 @Scalar('MongoObjectId')
 export class ObjectIdScalar {
@@ -11,7 +12,7 @@ export class ObjectIdScalar {
   }
 
   serialize(value: ObjectId) {
-    return value.toHexString(); // value sent to the client
+    return value = mongoose.Types.ObjectId(value); // value sent to the client
   }
 
   parseLiteral(ast: ASTNode) {

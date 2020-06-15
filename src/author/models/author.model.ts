@@ -1,10 +1,11 @@
 import { Field, Int, ObjectType, InputType, Directive } from "@nestjs/graphql";
 import {Post} from './post.model';
+import { ObjectIdScalar } from "../scalars/mongo-object.scalar";
 @ObjectType()
 @InputType('AuthorInput')
 export class Author {
-    @Field(type => Int,{complexity:10})
-    id: number;
+    @Field()
+    _id: ObjectIdScalar;
   
     @Field({ nullable: true , complexity:10})
     firstName?: string;

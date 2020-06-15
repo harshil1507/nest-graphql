@@ -3,6 +3,7 @@ import {Author} from './models/author.model';
 import { Post } from "./models/post.model";
 import {PostService} from './post.service'
 import {AuthorService} from './author.service'
+import { ObjectIdScalar } from "./scalars/mongo-object.scalar";
 @Resolver(of => Author)
 export class AuthorResolver{
     constructor(
@@ -14,19 +15,19 @@ export class AuthorResolver{
 //--------Queries-----------
 @Query(returns => [Post])
 async FetchAllPosts(
-    @Args({name: 'authorId', type:()=>Int}) authorId : number,
-    @Args('cursor')cursor : string,
-    @Args('limit', {type: ()=>Int})limit : number,
-    @Args('reverse',{type: ()=> Boolean, nullable: true}) reverse : boolean
+    @Args({name: 'authorId'}) authorId : ObjectIdScalar,
+    @Args('cursor', {nullable: true})cursor ?: ObjectIdScalar,
+    @Args('limit', {type: ()=>Int, nullable: true})limit ?: number,
+    @Args('reverse',{type: ()=> Boolean, nullable: true}) reverse ?: boolean
 ){
-    return this.authorService.fetchAllPosts(authorId);
+    return this.postService.fetchAllPosts(authorId,cursor,limit,reverse);
 }
 
 
 
 @Query(returns=>[Author])
 async FetchAllAuthors(
-    @Args('cursor')cursor : string,
+    @Args('cursor', {nullable: true})cursor : ObjectIdScalar,
     @Args('limit', {type: ()=>Int, nullable: true})limit : number,
     @Args('reverse',{type: ()=> Boolean, nullable: true}) reverse : boolean
 
@@ -38,60 +39,58 @@ async FetchAllAuthors(
 
     @Mutation(returns=> [Post])
     async AddPost(
-        @Args({name: 'authorId', type:()=>Int}) authorId : number,
-        @Args({name: 'id', type:()=>Int}) id : number,
+        @Args({name: 'authorId'}) authorId : ObjectIdScalar,
         @Args({name: 'title'}) title : string,
         @Args({name: 'votes', type:()=>Int, nullable:true}) votes ?: number,
         @Args({name:'date', type:()=> Date, nullable:true}) date ?: Date,
     ){
-        return this.authorService.addPost({authorId,id, title})
+        return this.postService.addPost({authorId,title})
     }
 
     @Mutation(returns => Post)
     async UpdatePost(
-        @Args({name: 'authorId', type:()=>Int}) authorId : number,
-        @Args({name: 'id', type:()=>Int}) id : number,
+        @Args({name: 'authorId'}) authorId : ObjectIdScalar,
+        @Args({name: 'id'}) _id : ObjectIdScalar,
         @Args({name: 'title'}) title : string,
     ){
-        return this.authorService.updatePost({authorId,id,title})
+        return this.postService.updatePost({authorId,_id,title})
     }
 
     @Mutation(returns => Post)
     async UpVote(
-        @Args({name: 'authorId', type:()=>Int}) authorId : number,
-        @Args({name: 'id', type:()=>Int}) id : number,
+        @Args({name: 'authorId'}) authorId : ObjectIdScalar,
+        @Args({name: 'id'}) id : ObjectIdScalar,
     ){
-        return this.authorService.upVote(authorId,id);
+        return this.postService.upVote(authorId,id);
     }
     
     @Mutation(returns => Author)
     async DeletePost(
-        @Args({name: 'authorId', type:()=>Int}) authorId : number,
-        @Args({name: 'id', type:()=>Int}) id : number,
+        @Args({name: 'authorId'}) authorId : ObjectIdScalar,
+        @Args({name: 'id'}) id : ObjectIdScalar,
     ){
-        return this.authorService.deletePost(authorId,id);
+        return this.postService.deletePost(authorId,id);
     }
 
     @Mutation(returns=>Author)
     async AddAuthor(
-        @Args({name: 'id', type:()=>Int}) id : number,
         @Args('firstName') firstName:string,
         @Args('lastName', {nullable:true}) lastName?:string,
         //@Args('posts',{ type:()=> Post, nullable:true, defaultValue:[]}) posts?:Post
     ){
-        return this.authorService.create({id,firstName,lastName});
+        return this.authorService.create({firstName,lastName});
     }
 
     @Mutation(returns => Boolean)
     async DeleteAuthor(
-        @Args({name: 'id', type: ()=> Int}) authorId : number
+        @Args({name: 'id'}) authorId : ObjectIdScalar
     ){
         return this.authorService.deleteAuthor(authorId)
     }
 
     @Mutation(returns=>Author)
     async UpdateAuthor(
-        @Args({name: 'id', type:()=>Int}) id : number,
+        @Args({name: 'id'}) id : ObjectIdScalar,
         @Args('firstName',{nullable : true}) firstName?:string,
         @Args('lastName', {nullable:true}) lastName?:string,
         //@Args('posts',{ type:()=> Post, nullable:true, defaultValue:[]}) posts?:Post
