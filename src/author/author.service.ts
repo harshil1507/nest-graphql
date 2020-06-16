@@ -5,7 +5,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { AuthorDB,PostDB } from "./schemas/author.schema";
 import { Model } from 'mongoose';
 import { CreateAuthorDto } from "./dto/create-author.dto";
-import { CreatePostDto } from './dto/create-post.dto';
 import { ObjectIdScalar } from './scalars/mongo-object.scalar';
 var mongoose = require('mongoose');
 @Injectable()
@@ -16,7 +15,7 @@ export class AuthorService{
         @InjectModel(PostDB.name)protected postModel: Model<PostDB>,
         ){}
     
-        async checkAuthorPresent(id?: ObjectIdScalar){
+        async checkAuthorPresent(id?: ObjectIdScalar) : Promise<AuthorDB[]>{
         if(id)  return this.authorModel.find({id: id}).exec();
         return this.authorModel.find().exec();
     }

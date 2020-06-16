@@ -24,6 +24,20 @@ type Author {
   prev: Int
 }
 
+type Person {
+  _id: MongoObjectId!
+  name: String!
+  age: Int
+  stories: [Story!]!
+}
+
+type Story {
+  _id: MongoObjectId!
+  author: [Person!]!
+  title: String!
+  fans: [Person!]!
+}
+
 input PostInput {
   _id: MongoObjectId!
   title: String!
@@ -40,9 +54,25 @@ input AuthorInput {
   prev: Int
 }
 
+input PersonInput {
+  _id: MongoObjectId!
+  name: String!
+  age: Int
+  stories: [StoryInput!]!
+}
+
+input StoryInput {
+  _id: MongoObjectId!
+  author: [PersonInput!]!
+  title: String!
+  fans: [PersonInput!]!
+}
+
 type Query {
   FetchAllPosts(reverse: Boolean, limit: Int, cursor: MongoObjectId, authorId: MongoObjectId!): [Post!]!
   FetchAllAuthors(reverse: Boolean, limit: Int, cursor: MongoObjectId): [Author!]!
+  populate: Story!
+  aggregate: [Story!]!
 }
 
 type Mutation {
@@ -53,4 +83,5 @@ type Mutation {
   AddAuthor(lastName: String, firstName: String!): Author!
   DeleteAuthor(id: MongoObjectId!): Boolean!
   UpdateAuthor(lastName: String, firstName: String, id: MongoObjectId!): Author!
+  saveStatic: Story!
 }
