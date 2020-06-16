@@ -3,20 +3,17 @@
 # ------------------------------------------------------
 
 type Post {
-  _id: MongoObjectId!
+  _id: String!
   title: String!
   votes: Int
   date: Date!
 }
 
-"""Mongo object id scalar type"""
-scalar MongoObjectId
-
 """Custom scalar for Date"""
 scalar Date
 
 type Author {
-  _id: MongoObjectId!
+  _id: String!
   firstName: String
   lastName: String
   posts: [Post]
@@ -31,6 +28,9 @@ type Person {
   stories: [Story!]!
 }
 
+"""Mongo object id scalar type"""
+scalar MongoObjectId
+
 type Story {
   _id: MongoObjectId!
   author: [Person!]!
@@ -39,14 +39,14 @@ type Story {
 }
 
 input PostInput {
-  _id: MongoObjectId!
+  _id: String!
   title: String!
   votes: Int
   date: Date!
 }
 
 input AuthorInput {
-  _id: MongoObjectId!
+  _id: String!
   firstName: String
   lastName: String
   posts: [PostInput]
@@ -69,19 +69,19 @@ input StoryInput {
 }
 
 type Query {
-  FetchAllPosts(reverse: Boolean, limit: Int, cursor: MongoObjectId, authorId: MongoObjectId!): [Post!]!
-  FetchAllAuthors(reverse: Boolean, limit: Int, cursor: MongoObjectId): [Author!]!
+  FetchAllPosts(reverse: Boolean, limit: Int, cursor: String, authorId: String!): [Post!]!
+  FetchAllAuthors(reverse: Boolean, limit: Int, cursor: String): [Author!]!
   populate: Story!
   aggregate: [Story!]!
 }
 
 type Mutation {
-  AddPost(date: Date, votes: Int, title: String!, authorId: MongoObjectId!): [Post!]!
-  UpdatePost(title: String!, id: MongoObjectId!, authorId: MongoObjectId!): Post!
-  UpVote(id: MongoObjectId!, authorId: MongoObjectId!): Post!
-  DeletePost(id: MongoObjectId!, authorId: MongoObjectId!): Author!
+  AddPost(date: Date, votes: Int, title: String!, authorId: String!): [Post!]!
+  UpdatePost(title: String!, id: String!, authorId: String!): Post!
+  UpVote(id: String!, authorId: String!): Post!
+  DeletePost(id: String!, authorId: String!): Author!
   AddAuthor(lastName: String, firstName: String!): Author!
-  DeleteAuthor(id: MongoObjectId!): Boolean!
-  UpdateAuthor(lastName: String, firstName: String, id: MongoObjectId!): Author!
+  DeleteAuthor(id: String!): Boolean!
+  UpdateAuthor(lastName: String, firstName: String, id: String!): Author!
   saveStatic: Story!
 }

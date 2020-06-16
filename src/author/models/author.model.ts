@@ -5,7 +5,7 @@ import { ObjectIdScalar } from "../scalars/mongo-object.scalar";
 @InputType('AuthorInput')
 export class Author {
     @Field()
-    _id: ObjectIdScalar;
+    _id: string;
   
     @Field({ nullable: true , complexity:10})
     firstName?: string;

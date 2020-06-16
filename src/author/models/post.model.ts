@@ -7,7 +7,7 @@ import { ObjectIdScalar } from "../scalars/mongo-object.scalar";
 @InputType('PostInput')
 export class Post{
     @Field()
-    _id: ObjectIdScalar;
+    _id: string;
 
     @Field()
     title: string;

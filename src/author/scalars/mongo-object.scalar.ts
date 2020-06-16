@@ -12,7 +12,7 @@ export class ObjectIdScalar {
   }
 
   serialize(value: ObjectId) {
-    return value = mongoose.Types.ObjectId(value); // value sent to the client
+    return value.toHexString(); // value sent to the client
   }
 
   parseLiteral(ast: ASTNode) {

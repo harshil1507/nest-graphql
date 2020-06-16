@@ -1,9 +1,9 @@
 import { ObjectIdScalar } from "../scalars/mongo-object.scalar";
 
 export class CreatePostDto{
-    readonly authorId : ObjectIdScalar;
+    readonly authorId : string;
     readonly title : string;
-    readonly _id ?: ObjectIdScalar;
+    readonly _id ?: string;
     readonly votes ?: number;
     readonly date ?: Date ;
 }

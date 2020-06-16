@@ -15,7 +15,7 @@ export class AuthorService{
         @InjectModel(PostDB.name)protected postModel: Model<PostDB>,
         ){}
     
-        async checkAuthorPresent(id?: ObjectIdScalar) : Promise<AuthorDB[]>{
+        async checkAuthorPresent(id?: string) : Promise<AuthorDB[]>{
         if(id)  return this.authorModel.find({id: id}).exec();
         return this.authorModel.find().exec();
     }
@@ -30,23 +30,25 @@ export class AuthorService{
         else    return createdAuthor.save();
     }
 
-    async deleteAuthor(id: ObjectIdScalar): Promise<Boolean>{
+    async deleteAuthor(id: string): Promise<Boolean>{
         console.log(id)
+        id = new mongoose.Types.ObjectId(id)
         let a = await this.authorModel.deleteOne({_id:id}).exec()
         if(a.n === 1 )
             return true
         return false
     }
 
-    async updateAuthor(id: ObjectIdScalar, firstName?: string, lastName?: string){
+    async updateAuthor(id: string, firstName?: string, lastName?: string){
+        id = new mongoose.Types.ObjectId(id)
         let newAuthor = await this.authorModel.findOne({_id:id}).exec()
         if(firstName) newAuthor.firstName = firstName;
         if(lastName) newAuthor.lastName = lastName;
         return newAuthor.save();
     }
 
-    async fetchAllAuthors(cursor:ObjectIdScalar, limit?: number, reverse?: boolean) : Promise<AuthorDB[]>{
-                
+    async fetchAllAuthors(cursor:string, limit?: number, reverse?: boolean) : Promise<AuthorDB[]>{
+        cursor = new mongoose.Types.ObjectId(cursor)
         if(limit){
             if(cursor){
                 if(reverse === true) return this.authorModel.find({_id : {$lte : cursor}}).limit(limit).exec()

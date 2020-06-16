@@ -15,8 +15,8 @@ export class AuthorResolver{
 //--------Queries-----------
 @Query(returns => [Post])
 async FetchAllPosts(
-    @Args({name: 'authorId'}) authorId : ObjectIdScalar,
-    @Args('cursor', {nullable: true})cursor ?: ObjectIdScalar,
+    @Args({name: 'authorId'}) authorId : string,
+    @Args('cursor', {nullable: true})cursor ?: string,
     @Args('limit', {type: ()=>Int, nullable: true})limit ?: number,
     @Args('reverse',{type: ()=> Boolean, nullable: true}) reverse ?: boolean
 ){
@@ -27,7 +27,7 @@ async FetchAllPosts(
 
 @Query(returns=>[Author])
 async FetchAllAuthors(
-    @Args('cursor', {nullable: true})cursor : ObjectIdScalar,
+    @Args('cursor', {nullable: true})cursor : string,
     @Args('limit', {type: ()=>Int, nullable: true})limit : number,
     @Args('reverse',{type: ()=> Boolean, nullable: true}) reverse : boolean
 
@@ -39,7 +39,7 @@ async FetchAllAuthors(
 
     @Mutation(returns=> [Post])
     async AddPost(
-        @Args({name: 'authorId'}) authorId : ObjectIdScalar,
+        @Args({name: 'authorId'}) authorId : string,
         @Args({name: 'title'}) title : string,
         @Args({name: 'votes', type:()=>Int, nullable:true}) votes ?: number,
         @Args({name:'date', type:()=> Date, nullable:true}) date ?: Date,
@@ -49,8 +49,8 @@ async FetchAllAuthors(
 
     @Mutation(returns => Post)
     async UpdatePost(
-        @Args({name: 'authorId'}) authorId : ObjectIdScalar,
-        @Args({name: 'id'}) _id : ObjectIdScalar,
+        @Args({name: 'authorId'}) authorId : string,
+        @Args({name: 'id'}) _id : string,
         @Args({name: 'title'}) title : string,
     ){
         return this.postService.updatePost({authorId,_id,title})
@@ -58,16 +58,16 @@ async FetchAllAuthors(
 
     @Mutation(returns => Post)
     async UpVote(
-        @Args({name: 'authorId'}) authorId : ObjectIdScalar,
-        @Args({name: 'id'}) id : ObjectIdScalar,
+        @Args({name: 'authorId'}) authorId : string,
+        @Args({name: 'id'}) id : string,
     ){
         return this.postService.upVote(authorId,id);
     }
     
     @Mutation(returns => Author)
     async DeletePost(
-        @Args({name: 'authorId'}) authorId : ObjectIdScalar,
-        @Args({name: 'id'}) id : ObjectIdScalar,
+        @Args({name: 'authorId'}) authorId : string,
+        @Args({name: 'id'}) id : string,
     ){
         return this.postService.deletePost(authorId,id);
     }
@@ -83,14 +83,14 @@ async FetchAllAuthors(
 
     @Mutation(returns => Boolean)
     async DeleteAuthor(
-        @Args({name: 'id'}) authorId : ObjectIdScalar
+        @Args({name: 'id'}) authorId : string
     ){
         return this.authorService.deleteAuthor(authorId)
     }
 
     @Mutation(returns=>Author)
     async UpdateAuthor(
-        @Args({name: 'id'}) id : ObjectIdScalar,
+        @Args({name: 'id'}) id : string,
         @Args('firstName',{nullable : true}) firstName?:string,
         @Args('lastName', {nullable:true}) lastName?:string,
         //@Args('posts',{ type:()=> Post, nullable:true, defaultValue:[]}) posts?:Post

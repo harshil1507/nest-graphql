@@ -28,18 +28,21 @@ export class PostService{
         newPost._id = new mongoose.Types.ObjectId();
         newPost.title = createPostDto.title;
         newPost.votes = 0;
-        newPost.date = new Date() 
+        newPost.date = new Date();
         newAuthor.posts.push(newPost);
         newAuthor.save()
         return newAuthor.posts
             
     }
 
-    async fetchAllPosts(authorId : ObjectIdScalar,cursor : ObjectIdScalar, limit: number,reverse:boolean): Promise<PostDB[]>{
-        let allPosts = await this.authorModel.findOne({_id : authorId}).exec()
+    async fetchAllPosts(authorId : string,cursor ?: string, limit?: number,reverse?:boolean): Promise<PostDB[]>{
+        
+        let allPosts = await this.authorModel.findOne({_id : new mongoose.Types.ObjectId(authorId)}).exec()
         let result
+        console.log(authorId,cursor,limit,reverse)
         let index :number;
         if(cursor){
+            cursor = new mongoose.Types.ObjectId(cursor)
             result = allPosts.posts.filter((obj)=>JSON.stringify(obj._id) >= JSON.stringify(cursor));
             if(reverse===true) result = allPosts.posts.filter((obj)=>JSON.stringify(obj._id) <= JSON.stringify(cursor));
             if(limit){
@@ -54,7 +57,8 @@ export class PostService{
         return allPosts.posts
     }
 
-    async upVote(authorId: ObjectIdScalar,id: ObjectIdScalar): Promise<PostDB>{
+    async upVote(authorId: string,id: string): Promise<PostDB>{
+        authorId = new mongoose.Types.ObjectId(authorId)
         let newAuthor = await this.authorModel.findOne({_id : authorId}).exec()
         let i: number;
         //console.log(newAuthor);
@@ -75,7 +79,8 @@ export class PostService{
     }
 
     async updatePost(createPostDto : CreatePostDto) : Promise<PostDB> {
-        let newAuthor = await this.authorModel.findOne({_id : createPostDto.authorId}).exec()
+        
+        let newAuthor = await this.authorModel.findOne({_id : new mongoose.Types.ObjectId(createPostDto.authorId)}).exec()
         let i: number;
         newAuthor.posts.find((obj,index)=>{
             if(JSON.stringify(obj._id) === JSON.stringify(createPostDto._id)){
@@ -89,7 +94,8 @@ export class PostService{
         return newAuthor.posts[i];
     }
 
-    async deletePost(authorId : ObjectIdScalar,id : ObjectIdScalar){
+    async deletePost(authorId : string,id : string){
+        new mongoose.Types.ObjectId(authorId)
         let newAuthor = await this.authorModel.findOne({_id : authorId}).exec()
         newAuthor.posts.map((obj,index)=>{
             if(JSON.stringify(obj._id) === JSON.stringify(id)){
