@@ -11,7 +11,7 @@ import {StoryModule} from './story/story.module'
   imports: [
     AuthorModule,
     StoryModule,
-    MongooseModule.forRoot('mongodb+srv://harshil:harshil@123@cluster0-stbbj.mongodb.net/Nest?retryWrites=true&w=majority'),
+    MongooseModule.forRoot('mongodb+srv://harshil:harshil@123@cluster0-stbbj.mongodb.net/Test?retryWrites=true&w=majority'),
     GraphQLModule.forRoot({
       schemaDirectives: {
         upper : UpperCaseDirective,

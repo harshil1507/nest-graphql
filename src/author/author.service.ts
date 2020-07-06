@@ -23,7 +23,6 @@ export class AuthorService{
     async create(createAuthorDto : CreateAuthorDto): Promise<AuthorDB>{
         const createdAuthor = new this.authorModel(createAuthorDto);
         createdAuthor._id = new mongoose.Types.ObjectId();
-        console.log(createdAuthor)
 
         if((await this.checkAuthorPresent(createdAuthor._id)).length !== 0)
             throw new ConflictException;
@@ -31,7 +30,6 @@ export class AuthorService{
     }
 
     async deleteAuthor(id: string): Promise<Boolean>{
-        console.log(id)
         id = new mongoose.Types.ObjectId(id)
         let a = await this.authorModel.deleteOne({_id:id}).exec()
         if(a.n === 1 )
@@ -48,19 +46,20 @@ export class AuthorService{
     }
 
     async fetchAllAuthors(cursor:string, limit?: number, reverse?: boolean) : Promise<AuthorDB[]>{
-        cursor = new mongoose.Types.ObjectId(cursor)
         if(limit){
             if(cursor){
-                if(reverse === true) return this.authorModel.find({_id : {$lte : cursor}}).limit(limit).exec()
-                return this.authorModel.find({_id : {$gte : cursor}}).limit(limit).exec()
+                cursor = new mongoose.Types.ObjectId(cursor);
+                if(reverse === true) return this.authorModel.find({_id : {$lt : cursor}}).limit(limit).exec()
+                return this.authorModel.find({_id : {$gt : cursor}}).limit(limit).exec()
             }
             if(reverse === true) return this.authorModel.find().limit(limit).exec()
             return this.authorModel.find().limit(limit).exec()
         
         }
         if(cursor){
-            if(reverse === true) return this.authorModel.find({_id : {$lte : cursor}}).exec()
-            return this.authorModel.find({_id : {$gte : cursor}}).exec()
+            cursor = new mongoose.Types.ObjectId(cursor);
+            if(reverse === true) return this.authorModel.find({_id : {$lt : cursor}}).exec()
+            return this.authorModel.find({_id : {$gt : cursor}}).exec()
         }
 
         return this.authorModel.find().limit(limit).exec()

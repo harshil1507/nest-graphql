@@ -37,7 +37,6 @@ export class StoryService {
         }).
         exec()
         
-        console.log(result);
         return result;
     }
 
@@ -58,8 +57,6 @@ export class StoryService {
             }
             
         ]).exec()
-
-        console.log(result, result.author)
         return result
     }
 

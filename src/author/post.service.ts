@@ -22,9 +22,8 @@ export class PostService{
 
     async addPost(createPostDto : CreatePostDto): Promise<PostDB[]>{
         // let newAuthor = new this.authorModel(CreateAuthorDto);
-        let newAuthor = await this.authorModel.findOne({_id : createPostDto.authorId}).exec()
+        let newAuthor = await this.authorModel.findOne({_id : new mongoose.Types.ObjectId(createPostDto.authorId)}).exec()
         let newPost = new this.postModel(createPostDto);
-        // console.log(newAuthor,'-',newPost);
         newPost._id = new mongoose.Types.ObjectId();
         newPost.title = createPostDto.title;
         newPost.votes = 0;
@@ -35,11 +34,10 @@ export class PostService{
             
     }
 
-    async fetchAllPosts(authorId : string,cursor ?: string, limit?: number,reverse?:boolean): Promise<PostDB[]>{
+    async fetchAllPosts(authorId : string,cursor ?: string, limit?: number,reverse?:boolean): Promise<Author>{
         
         let allPosts = await this.authorModel.findOne({_id : new mongoose.Types.ObjectId(authorId)}).exec()
         let result
-        console.log(authorId,cursor,limit,reverse)
         let index :number;
         if(cursor){
             cursor = new mongoose.Types.ObjectId(cursor)
@@ -54,36 +52,32 @@ export class PostService{
             result = allPosts.posts
             result = result.slice(0,limit)
         }
-        return allPosts.posts
+        return allPosts
     }
 
     async upVote(authorId: string,id: string): Promise<PostDB>{
         authorId = new mongoose.Types.ObjectId(authorId)
         let newAuthor = await this.authorModel.findOne({_id : authorId}).exec()
         let i: number;
-        //console.log(newAuthor);
         
         newAuthor.posts.find((obj,index)=>{
-            //console.log(obj);
             
             if(JSON.stringify(obj._id) === JSON.stringify(id)){
                 i = index;
                 newAuthor.posts[index].votes = newAuthor.posts[index].votes+1; 
-                console.log(newAuthor)
                 return
             }
         })
         await newAuthor.save()
-        console.log('---------------------',newAuthor)
         return newAuthor.posts[i];
     }
 
     async updatePost(createPostDto : CreatePostDto) : Promise<PostDB> {
-        
+        let id = new mongoose.Types.ObjectId(createPostDto.authorId)
         let newAuthor = await this.authorModel.findOne({_id : new mongoose.Types.ObjectId(createPostDto.authorId)}).exec()
         let i: number;
         newAuthor.posts.find((obj,index)=>{
-            if(JSON.stringify(obj._id) === JSON.stringify(createPostDto._id)){
+            if(JSON.stringify(obj._id) === JSON.stringify(new mongoose.Types.ObjectId(createPostDto._id))){
                 i = index;
                 newAuthor.posts[index].title = createPostDto.title;
                 newAuthor.posts[index].date = new Date();
@@ -94,8 +88,9 @@ export class PostService{
         return newAuthor.posts[i];
     }
 
-    async deletePost(authorId : string,id : string){
-        new mongoose.Types.ObjectId(authorId)
+    async deletePost(authorId : string,id : string): Promise<AuthorDB>{
+        authorId = new mongoose.Types.ObjectId(authorId)
+        //new mongoose.Types.ObjectId(id)
         let newAuthor = await this.authorModel.findOne({_id : authorId}).exec()
         newAuthor.posts.map((obj,index)=>{
             if(JSON.stringify(obj._id) === JSON.stringify(id)){
@@ -103,8 +98,7 @@ export class PostService{
                 return 
             }
         })
-        newAuthor.save()
-        return newAuthor
+        return newAuthor.save()
     }
 
 }
